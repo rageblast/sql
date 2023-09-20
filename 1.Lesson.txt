@@ -1,0 +1,14 @@
+ -> inside terminal -> mysql -u root -p
+ -> type password
+ -> show database;
+
+ -> Inside Work Bench -> type root -> password -> then type show database;
+
+ -> CREATE DATABASE Pet_show; (or) create database Soap_store;
+
+ -> DROP DATABASE Soap_store; 
+
+ -> Now we need to know what database we are going to use
+
+ -> USE Pet_show;
+ -> To know which database we are using use -> SELECT database();
