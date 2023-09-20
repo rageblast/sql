@@ -6,9 +6,48 @@
 
  -> CREATE DATABASE Pet_show; (or) create database Soap_store;
 
- -> DROP DATABASE Soap_store; 
+ -> DROP DATABASE Soap_store;  -> be careful 
 
  -> Now we need to know what database we are going to use
 
  -> USE Pet_show;
  -> To know which database we are using use -> SELECT database();
+
+ -> Table is a collection of related data held in a structured format within a database
+
+ -> Data Types
+
+ Numeric -> INT, SMALLINT, TINYINT, MEDUIMINT, BIGINT, DECIMAL, NUMERIC, FLOAT, DOUBLE, BIT
+ String -> CHAR, VARCHAR, BINARY, VARBINARY, BLOB, TINYBLOB, MEDIUMBLOB, LONGBLOB, TEXT, TINYTEXT, MEDIUMTEXT, LONGTEXT, ENUM
+ Date -> Date, DATETIME, TIMESTAMP, TIME, YEAR
+
+ check docs for the different data types values
+
+ CREATE TABLE cats ( name VARCHAR(50), age INT );
+
+use tea_shop;
+
+SHOW TABLES;
+
+SHOW COLUMNS FROM cats; (or) DESC cats;
+
+DROP TABLE cats; -> be careful
+
+CLI -> Command Line Interface
+
+// TEST
+
+CREATE DATABASE BACKERY
+
+USE BACKERY
+
+CREATE TABLE pasteries(
+  name: VARCHAR(50),
+  quantity: INT
+);
+
+DESC pasteries; (or) SHOW COLUMNS FROM pasteries;
+
+DROP TABLE pasteries
+
+-- TO Add COMMENTS -> use --(Space)
