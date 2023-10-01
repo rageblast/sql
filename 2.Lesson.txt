@@ -1,0 +1,92 @@
+SELECT DATABASE() -> CHECK WHICH DATABASE WE ARE IN 
+
+INSERT INTO CATS(name, age) VALUES("BLUE",5);
+
+SELECT * FROM cats; -> check the data
+
+order does not matter until we pass correct values 
+
+INSERT INTO CATS(age,name) VALUES(5,"BLUE");
+
+Many records
+INSERT INTO CATS(name, age) VALUES("BLUE",5),("GREEN",5),("YELLOW",5);
+
+EXERCISE:
+
+USE DATABASE PEOPLES
+
+CREATE TABLE people(first_name VARCHAR(20), LAST_NAME VARCHAR(20), age INT);
+
+INSERT INTO people(first_name, LAST_NAME, age) VALUES("Tina","BELCHER",13)
+
+INSERT INTO people(first_name, LAST_NAME, age) VALUES("LINDA", "BELCHER", 45),("PHILIP","BELCHER",38);
+
+DROP TABLE people;
+
+NOT NULL CASE:
+
+CREATE TABLE CATS2 ( NAME VARCHAR(100) NOT NULL, AGE INT NOT NULL );
+
+-> ALWAYS USE SINGLE QUOTES NOT DOUBLE QOUTES -> BECAUSE IT WILL SOMETIME SHOWS US ERROR
+
+-> ESCAPE CHARACTER -> ('mario\'s pizza')
+
+-> DOUBLE QUOTES INSIDE SINGLE QUOTES ('she said "haha"') -> but wont try some time somes error some time works
+
+-> Default
+
+-> CREATE TABLE cat3 (
+  name VARCHAR(100) DEFAULT 'UNNAMED',
+  age INT DEFAULT 99
+)
+
+-> default values allows us to set NULL Values 
+-> INSERT INTO cat3(name, age) VALUES(NULL, NULL)
+
+-> to make it not nullable and have default value we can use 
+-> CREATE TABLE cat3 (
+  name VARCHAR(100) NOT NULL DEFAULT 'UNNAMED',
+  age INT NOT NULL DEFAULT 99
+)
+
+Primary Key:
+Make field unique
+
+CREATE TABLE unique_cats (
+  cat_id  INT NOT NULL PRIMARY KEY,
+  name VARCHAR(100),
+  age INT
+)
+
+or 
+
+    CREATE TABLE unique_cats2 (
+    	cat_id INT,
+        name VARCHAR(100) NOT NULL,
+        age INT NOT NULL,
+        PRIMARY KEY (cat_id)
+    );
+
+    PRIMARY KEY CANNOT BE NULL 
+
+    Auto Increment Values:
+
+    CREATE TABLE unique_cats2 (
+    	cat_id INT AUTO_INCREMENT,
+        name VARCHAR(100) NOT NULL,
+        age INT NOT NULL,
+        PRIMARY KEY (cat_id)
+    );
+
+    Exercise:
+
+    CREATE TABLE Employees (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      Last_Name VARCHAR(100) NOT NULL,
+      First_Name VARCHAR(100) NOT NULL,
+      Middle_Name VARCHAR(100),
+      age INT NOT NULL,
+      Current_Status VARCHAR(100) NOT NULL DEFAULT 'Employed'
+    )
+
+    INSERT INTO Employees (First_Name, Last_Name, age) VALUES ('thomas', 'chickenman', 87)
