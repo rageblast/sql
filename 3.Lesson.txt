@@ -1,0 +1,81 @@
+CREATE:
+INSERT INTO cats(name, age) VALUES('Taco', 14);
+
+CATS:
+    CREATE TABLE cats (
+        cat_id INT AUTO_INCREMENT,
+        name VARCHAR(100),
+        breed VARCHAR(100),
+        age INT,
+        PRIMARY KEY (cat_id)
+    ); 
+
+ CREATE:
+    INSERT INTO cats(name, breed, age) 
+    VALUES ('Ringo', 'Tabby', 4),
+           ('Cindy', 'Maine Coon', 10),
+           ('Dumbledore', 'Maine Coon', 11),
+           ('Egg', 'Persian', 4),
+           ('Misty', 'Tabby', 13),
+           ('George Michael', 'Ragdoll', 9),
+           ('Jackson', 'Sphynx', 7);
+
+READ:
+SELECT * FROM cats;
+SELECT age FROM cats;
+SELECT name, breed FROM cats;
+
+SELECT * FROM cats WHERE age = 4;
+SELECT * FROM cats WHERE name ='Egg'; -> CASE INSENSISITIVE
+
+SELECT cat_id FROM cats;
+SELECT name, breed FROM cats;
+SELECT name, age FROM cats WHERE breed='Tabby';
+SELECT cat_id, age FROM cats WHERE cat_id=age; -> 4=4, 5=5
+SELECT * FROM cats WHERE cat_id=age; -> 4=4, 5=5
+
+Alias:
+It doesn't actually change the name of the column in the table
+SELECT cat_id AS id, name FROM cats;
+
+Update:
+
+UPDATE cats SET breed='Shorthair' WHERE breed='Tabby';
+UPDATE cats SET age=14 WHERE name='Misty';
+
+All record update one go:
+UPDATE cats SET breed='Shorthair'
+
+    SELECT * FROM cats WHERE name='Jackson';   
+    UPDATE cats SET name='Jack' WHERE name='Jackson'; 
+    SELECT * FROM cats WHERE name='Jackson'; 
+    SELECT * FROM cats WHERE name='Jack'; 
+    SELECT * FROM cats WHERE name='Ringo'; 
+    UPDATE cats SET breed='British Shorthair' WHERE name='Ringo'; 
+    SELECT * FROM cats WHERE name='Ringo'; 
+    SELECT * FROM cats; 
+    SELECT * FROM cats WHERE breed='Maine Coon'; 
+    UPDATE cats SET age=12 WHERE breed='Maine Coon'; 
+    SELECT * FROM cats WHERE breed='Maine Coon';\
+
+DELETE:
+
+Delete all cats with name of 'Egg':
+
+DELETE FROM cats WHERE name='Egg';
+
+Delete all rows in the cats table:
+
+DELETE FROM cats; 
+
+Delete all 4 year old cats:
+
+    DELETE FROM cats WHERE age=4;
+
+Delete cats where cat_id is the same as their age:
+
+DELETE FROM cats WHERE cat_id=age;
+
+Delete all cats:
+
+DELETE FROM cats; 
