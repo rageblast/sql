@@ -1,0 +1,95 @@
+CREATE TABLE friends (name VARCHAR(10));
+
+INSERT INTO friends (name) 
+VALUES ('tom'), ('juan pablo'), ('james');
+
+SELECT * FROM friends;
+
+CHAR -> Fixed Length
+
+CREATE TABLE states(abbr CHAR(2));
+
+INSERT INTO states (abbr) VALUES ('CA'), ('NY');
+
+SELECT * FROM states;
+
+If i store X -> in the CHAR column but it has fixed length of 2 -> so the output
+will be 'X ' -> it will add extra space to reach that fixed length
+
+VARCHAR won't do it
+
+Value CHAR(4) STORAGE VARCHAR(4) STORAGE
+''     ' '      4bytes  ''        1byte
+'ab'   'ab  '   4bytes  'ab'      3bytes
+'abcd' 'abcd'   4bytes  'abcd'    5bytes
+
+Dont worry about bytes some charater takes extra bytes.
+
+Where to use CHAR -> Abbreviations, YES/NO Flags, Zip Codes
+
+INSERT INTO states (abbr) VALUES ('x');
+
+SELECT * FROM states;
+
+SELECT CHAR_LENGTH(abbr) FROM states;
+
+// Error
+
+INSERT INTO states (abbr) VALUES ('Ohio');
+
+// SEE the doc for learn more about TINYINT and other int types
+// their storage and their maximum values
+
+CREATE TABLE parent (children TINYINT);
+
+INSERT INTO parent(children) VALUES (2), (7), (0);
+
+Default we will work with signed integers
+
+DROP TABLE parent;
+
+CREATE TABLE parent (children TINYINT UNSIGNED);
+
+INSERT INTO parent(children) VALUES (3);
+
+INSERT INTO parent(children) VALUES (-2); // error
+
+DECIMALS:
+
+DECIMAL(5,2) -> 999.99 (total - 5, in that we have 2 decimal)
+
+CREATE TABLE products (price DECIMAL(5, 2));
+
+INSERT INTO products (price) VALUES (4.50);
+
+SELECT * FROM products;
+
+INSERT INTO products (price) VALUES (456.99);
+
+INSERT INTO products (price) VALUES (8347.1); // ERROR
+
+INSERT INTO products (price) VALUES(5.026);
+
+SHOW WARNINGS; 
+
+SELECT * FROM products;
+
+-> 5.026 -> 5.03(rounded up);
+
+decimal -> Takes More spaces
+FLOAT, DOUBLE -> Store larger numbers using less space but it comes
+at the cost of precision
+
+DATA TYPE  Memory Needed  Precision Issues
+FLOAT       4 Bytes        ~7 digits
+DOUBLE      8 Bytes        ~15 digits
+
+CREATE TABLE nums (X FLOAT, Y DOUBLE);
+
+INSERT INTO nums (x,y) VALUES (1.123, 1.123);
+
+SELECT * FROM nums;
+
+INSERT INTO nums (x,y) VALUES (1.12345678, 1.12345678912344);
+
+SELECT * FROM nums;
