@@ -1,0 +1,113 @@
+use shirts_db;
+
+// UNIQUE
+CREATE TABLE contacts (
+name VARCHAR(100) NOT NULL,
+phone VARCHAR(100) NOT NULL UNIQUE
+);
+
+INSERT INTO contacts (name, phone)
+VALUES ('BillyBob', '8781213455');
+
+//CHECK
+CREATE TABLE users (
+    username VARCHAR(20) NOT NULL,
+    age INT CHECK(age > 0)
+);
+
+INSERT INTO users (username, age)
+VALUES ('bluethecat', 20);
+
+INSERT INTO users (username, age)
+VALUES ('bluethecat', -10); // ERROR
+
+CREATE TABLE palindromes (
+    word VARCHAR(100) CHECK(REVERSE(word) = word)
+);
+
+INSERT INTO palindromes (word) 
+VALUES ('racecar');
+
+INSERT INTO palindromes (word)
+VALUES ('mommy'); // Error
+
+// Named Constraints
+
+CREATE TABLE users2 (
+    username VARCHAR(20) NOT NULL,
+    age INT,
+    CONSTRAINT age_not_negative CHECK (age >= 0)
+);
+
+INSERT INTO users2 (username, age)
+VALUES ('chickenlady', -9);
+
+CREATE TABLE palindromes2 (
+  word VARCHAR(100),
+  CONSTRAINT word_is_palindrome CHECK(REVERSE(word) = word)
+);
+
+INSERT INTO palindromes2 (word) 
+VALUES ('Mommy');
+
+// Multiple Columns Constraints
+
+CREATE TABLE companies (
+    name VARCHAR(255) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    CONSTRAINT name_address UNIQUE (name, address)
+);
+
+INSERT INTO companies (name, address)
+VALUES ('blackbird auto', '123 spruce');
+
+INSERT INTO companies (name, address)
+VALUES ('luiguis pies', '123 spruce');
+
+INSERT INTO companies (name, address)
+VALUES ('luiguis pies', '123 spruce'); // Error
+
+CREATE TABLE houses (
+    purchase_price INT NOT NULL,
+    sale_price INT NOT NULL,
+    CONSTRAINT sprice_gt_price CHECK(sale_price >= purchase_price)
+);
+
+INSERT INTO houses (purchase_price, sale_price) VALUES (100, 200);
+INSERT INTO houses (purchase_price, sale_price) VALUES (300, 250);
+
+// Alter Tables
+ALTER TABLE companies
+ADD COLUMN phone VARCHAR(15);
+
+ALTER TABLE companies
+ADD COLUMN employee_count INT NOT NULL DEFAULT 1;
+
+//DROP
+ALTER TABLE companies DROP COLUMN phone;
+ALTER TABLE companies DROP COLUMN employee_count;
+
+//Renaming Table 
+RENAME TABLE companies TO suppliers;
+(or)
+ALTER TABLE suppliers RENAME TO companies;
+
+ALTER TABLE companies
+RENAME COLUMN name TO company_name;
+
+// Change column data type
+ALTER TABLE companies
+RENAME COLUMN name TO company_name;
+
+ALTER TABLE companies
+MODIFY company_name VARCHAR(100) DEFAULT 'unKnown';
+
+INSERT INTO companies (address) VALUES ('2554 rose lane');
+
+// Change column name and data type in one go 
+ALTER TABLE suppliers
+CHANGE business biz_name VARCHAR(50);
+
+// Alter Constraints
+ALTER TABLE houses ADD CONSTRINT positive_price CHECK (purchase_price >= 0);
+Alter TABLE houses DROP CONSTRAINT positive_price;
