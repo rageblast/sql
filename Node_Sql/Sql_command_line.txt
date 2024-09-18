@@ -1,0 +1,189 @@
+mysql -u root -p
+
+if the above didn't work go and get the bin file from program files in sql
+and add it to the path variable
+
+inside db.js try this code
+
+connection.query("SELECT 1 + 1 AS solution", function (error, results, fields) {
+  if (error) throw error;
+  console.log("The solution is: ", results[0].solution);
+});
+
+var q = "SELECT CURTIME() as time, CURDATE() as date, NOW() as now";
+connection.query(q, function (error, results, fields) {
+  if (error) throw error;
+  console.log(results[0].time);
+  console.log(results[0].date);
+  console.log(results[0].now);
+});
+
+create a table inside your local instance
+
+CREATE TABLE users (
+    email VARCHAR(255) PRIMARY KEY,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+Insert Users:
+INSERT INTO users (email) VALUES('Katie34@yahoo.com'), ('Tunde@gmail.com');
+
+Try it in node db.js:
+
+var q = "SELECT * FROM users ";
+connection.query(q, function (error, results, fields) {
+  if (error) throw error;
+  console.log(results);
+});
+
+var k = "SELECT COUNT(*) AS total FROM users ";
+connection.query(k, function (error, results, fields) {
+  if (error) throw error;
+  console.log(results[0].total);
+});
+
+Insert records 1 time:
+
+var q = 'INSERT INTO users (email) VALUES ("rusty_the_dog@gmail.com")';
+ 
+connection.query(q, function (error, results, fields) {
+  if (error) throw error;
+  console.log(results);
+});
+
+Dynamic Approach:
+var { faker } = require("@faker-js/faker");
+
+var person = {
+    email: faker.internet.email(),
+    created_at: faker.date.past()
+};
+ 
+var end_result = connection.query('INSERT INTO users SET ?', person, function(err, result) {
+  if (err) throw err;
+  console.log(result);
+});
+
+500 Users:
+var { faker } = require("@faker-js/faker");
+
+var data = [];
+for (var i = 0; i < 500; i++) {
+  data.push([faker.internet.email(), faker.date.past()]);
+}
+
+var q = "INSERT INTO users (email, created_at) VALUES ?";
+
+connection.query(q, [data], function (err, result) {
+  console.log(err);
+  console.log(result);
+});
+
+
+// Batch Request
+// Query to fetch records in batches of 'batchSize' with an offset
+    const query = `SELECT * FROM CLMS_Attendance WHERE Recent = TRUE LIMIT ${batchSize} OFFSET ${offset};`;
+
+    // Execute the query
+    const results = await new Promise((resolve, reject) => {
+      connection.query(query, (error, results) => {
+        if (error) {
+          return reject("Error fetching records: " + error);
+        }
+        resolve(results);
+      });
+    });
+
+// Create Table 
+
+    // Step 1: Check if the "CLMS_Labour" table exists and create it if it doesn't
+    const createTableQuery = `
+      CREATE TABLE IF NOT EXISTS CLMS_Labour (
+        \`Employee Record Id\` VARCHAR(100) PRIMARY KEY,
+        \`Company Id\` VARCHAR(100),
+        \`Contractor Id\` VARCHAR(100),
+        \`Company Tag Id\` VARCHAR(100),
+        \`Status\` VARCHAR(100)
+      );
+    `;
+
+    Insert Records
+
+     // Step 3: Insert or update records in MySQL
+    for (const record of records) {
+      // Handle undefined values
+      const params = [
+        record.ID || null,
+        record.Company_code?.ID || null,
+        record.Contractor_Code?.ID || null,
+        record.Company_Tag_Id || null,
+        record.Status || null,
+      ];
+
+      // Validate parameters
+      if (params.some((param) => param === undefined)) {
+        console.error("One or more parameters are undefined:", params);
+        continue; // Skip this record or handle it appropriately
+      }
+
+      const query = `
+        INSERT INTO CLMS_Labour (\`Employee Record Id\`, \`Company Id\`, \`Contractor Id\`, \`Company Tag Id\`, \`Status\`)
+        VALUES (?, ?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE
+          \`Company Id\` = VALUES(\`Company Id\`),
+          \`Contractor Id\` = VALUES(\`Contractor Id\`),
+          \`Company Tag Id\` = VALUES(\`Company Tag Id\`),
+          \`Status\` = VALUES(\`Status\`);
+      `;
+
+      await connection.execute(query, params);
+    }
+
+    Example: 2
+     //create a new table if not exist
+    const createTableQuery = `
+    CREATE TABLE IF NOT EXISTS CLMS_Attendance (
+       \`ID\` BIGINT AUTO_INCREMENT PRIMARY KEY,
+        \`Employee Record Id\` VARCHAR(100),
+        \`Company Id\` VARCHAR(100),
+        \`Contractor Id\` VARCHAR(100),
+        \`Company Tag Id\` VARCHAR(100),
+        \`Present Date\` DATE,
+        \`InTime\` DATETIME,
+        \`OutTime\` DATETIME,
+        \`Duration\` TIME,
+        \`Status\` VARCHAR(50),
+        \`Recent\` BOOLEAN,
+        \`CreatedAt\` DATETIME DEFAULT CURRENT_TIMESTAMP,
+        \`UpdatedAt\` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    );
+`;
+
+// Insert new record into CLMS_Attendance
+                    const insertQuery = `
+                    INSERT INTO CLMS_Attendance (
+                        \`Employee Record Id\`, \`Company Id\`, \`Contractor Id\`, \`Company Tag Id\`, \`Present Date\`, 
+                        \`InTime\`, \`OutTime\`, \`Status\`, \`Recent\`, \`CreatedAt\`, \`UpdatedAt\`
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, TRUE, NOW(), NOW())
+                `;
+                    const insertValues = [
+                      employeeRecordId,
+                      companyId,
+                      contractorId,
+                      companyTagId,
+                      presentDate,
+                      inTime,
+                      outTime || null,
+                      insertStatus,
+                    ];
+
+                    connection.query(
+                      insertQuery,
+                      insertValues,
+                      (err, result) => {
+                        if (err) throw err;
+                        console.log(
+                          "New record inserted into CLMS_Attendance for employee with no previous records."
+                        );
+                      }
+                    );
