@@ -1,0 +1,67 @@
+-- INSTEAD OF TYPING THIS QUERY ALL THE TIME...
+SELECT 
+    title, released_year, genre, rating, first_name, last_name
+FROM
+    reviews
+        JOIN
+    series ON series.id = reviews.series_id
+        JOIN
+    reviewers ON reviewers.id = reviews.reviewer_id;
+ 
+-- WE CAN CREATE A VIEW:
+CREATE VIEW full_reviews AS 
+SELECT title, released_year, genre, rating, first_name, last_name 
+FROM reviews 
+JOIN series ON series.id = reviews.series_id
+JOIN reviewers ON reviewers.id = reviews.reviewer_id;
+
+Select * full_reviews;
+
+Select * full_reviews WHERE genre = 'Animation';
+
+SELECT genre, AVG(rating) FROM full_reviews GROUP BY genre;
+
+
+// Create a view won't able to update
+CREATE VIEW ordered_series AS
+SELECT * FROM series ORDER BY released_year;
+
+// But we can update the above view using the below code 
+CREATE OR REPLACE VIEW ordered_series AS
+SELECT * FROM series ORDER BY released_year DESC;
+ 
+ALTER VIEW ordered_series AS
+SELECT * FROM series ORDER BY released_year;
+ 
+// Won't delete the table it will drop the table 
+DROP VIEW ordered_series;
+
+// Having in views
+SELECT 
+    title, 
+    AVG(rating),
+    COUNT(rating) AS review_count
+FROM full_reviews 
+GROUP BY title HAVING COUNT(rating) > 1;
+
+Roll up:
+It should be used with group by it will give us the total count
+SELECT 
+    title, AVG(rating)
+FROM
+    full_reviews
+GROUP BY title WITH ROLLUP;
+ 
+ 
+SELECT 
+    title, COUNT(rating)
+FROM
+    full_reviews
+GROUP BY title WITH ROLLUP;
+ 
+ 
+SELECT 
+    first_name, released_year, genre, AVG(rating)
+FROM
+    full_reviews
+GROUP BY released_year , genre , first_name WITH ROLLUP;

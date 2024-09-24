@@ -1,0 +1,71 @@
+// Modes in SQL
+SELECT @@GLOBAL.sql_mode;
+SELECT @@SESSIon.sql_mode; -> every time if we close the mysql and open it this will be set to default
+
+-- To Set Them:
+SET GLOBAL sql_mode = 'modes';
+SET SESSION sql_mode = 'modes';
+
+// Touch the session not global rare situation touch global
+
+SELECT 3/0;
+
+SHOW WARNINGS;
+
+SET SESSION sql_mode = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION';
+
+// No WARNINGS because we have removed 'ERROR_FOR_DIVISION_BY_ZERO' using the above method
+
+SELECT 3/0;
+
+SHOW WARNINGS;
+
+SET SESSION sql_mode = 'ONLY_FULL_GROUP_BY'
+
+SELECT title, AVG(rating) FROM series
+JOIN reviews ON reviews.series_id = series.id
+GROUP BY title;
+
+Below will show error
+SET SESSION sql_mode = 'ONLY_FULL_GROUP_BY'
+
+SELECT title, rating FROM series
+JOIN reviews ON reviews.series_id = series.id
+GROUP BY title;
+
+Below won't show error:
+
+SET SESSION sql_mode = ''
+
+SELECT title, rating FROM series
+JOIN reviews ON reviews.series_id = series.id
+GROUP BY title;
+
+Date:
+
+SELECT @@SESSION.sql_mode;
+
+SET SESSION sql_mode = 'NO_ZERO_IN_DATE';
+SELECT DATE('2010-01-00');
+
+Show WARNINGS;
+
+Above will show WARNINGS BUT WILL INSERT RECORD
+
+for that see the below example:
+
+CREATE TABLE dates(d DATE);
+
+INSERT INTO dates (d) VALUES ('2023-11-00');
+
+SHOW WARNINGS;
+
+SELECT * FROM dates; -> 0000-00-00
+
+If i do the below it won't allow us to insert throws error
+
+SET SESSION sql_mode = 'NO_ZERO_IN_DATE,STRICT_TRANS_TABLES';
+
+INSERT INTO dates (d) VALUES ('2023-11-00');
+
+Above will throw error;
