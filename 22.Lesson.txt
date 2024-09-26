@@ -1,0 +1,80 @@
+Rank()
+Returns the rank of the current row within its partition.
+
+Rank()-> 1,1,3
+Dense_Rank() -> 1,1,2
+Row_number() -> 1,2,3
+
+SELECT 
+    emp_no, 
+    department, 
+    salary,
+    ROW_NUMBER() OVER(PARTITION BY department ORDER BY SALARY DESC) as dept_row_number,
+    RANK() OVER(PARTITION BY department ORDER BY SALARY DESC) as dept_salary_rank,
+    RANK() OVER(ORDER BY salary DESC) as overall_rank,
+    DENSE_RANK() OVER(ORDER BY salary DESC) as overall_dense_rank,
+    ROW_NUMBER() OVER(ORDER BY salary DESC) as overall_num
+FROM employees ORDER BY overall_rank;
+
+Ntile:
+
+Let's say we wanted to divide up salaries into quartiles and figure out which 
+quartile each salary fit into or which decimal tile or which percentage if we divide 
+it into a hundred we can do it in percentage basis also.
+
+Divides a partition into N groups (buckets), assign each row in the partition its bucket number, and returns the 
+bucket number of the current row.
+
+SELECT 
+    emp_no, 
+    department, 
+    salary,
+    NTILE(4) OVER(PARTITION BY department ORDER BY salary DESC) AS dept_salary_quartile,
+	NTILE(4) OVER(ORDER BY salary DESC) AS salary_quartile
+FROM employees;
+
+First Value:
+
+Returns the value of expr from the first row of the window frame.
+
+SELECT 
+    emp_no, 
+    department, 
+    salary,
+    FIRST_VALUE(emp_no) OVER(PARTITION BY department ORDER BY salary DESC) as highest_paid_dept,
+    FIRST_VALUE(emp_no) OVER(ORDER BY salary DESC) as highest_paid_overall
+FROM employees;
+
+Lead and Lag:
+
+Find the difference between one row and preceeding row or next row.
+
+SELECT 
+    emp_no, 
+    department, 
+    salary,
+    salary - LAG(salary) OVER(ORDER BY salary DESC) as salary_diff
+FROM employees;
+ 
+SELECT 
+    emp_no, 
+    department, 
+    salary,
+    salary - LAG(salary) OVER(PARTITION BY department ORDER BY salary DESC) as dept_salary_diff
+FROM employees;
+
+SELECT 
+    emp_no, 
+    department, 
+    salary,
+    salary - LEAD(salary) OVER(ORDER BY salary DESC) as salary_diff
+FROM employees;
+ 
+SELECT 
+    emp_no, 
+    department, 
+    salary,
+    salary - LEAD(salary) OVER(PARTITION BY department ORDER BY salary DESC) as dept_salary_diff
+FROM employees;
+
+LEAD(salary, 2) 0R LAG(salary, 2) -> 2 ROWS BEFORE AND AFTER
